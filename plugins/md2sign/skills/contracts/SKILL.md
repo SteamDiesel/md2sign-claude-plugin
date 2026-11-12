@@ -50,10 +50,11 @@ Call `get_markdown_spec` for the full rules and an example.
 | `invalid_document` | Fix the listed markdown errors, then validate again |
 | `unauthenticated` | Create an account or pass the user's API key (see step 4) |
 | `email_unverified` | Ask the user to click the confirmation link in their email |
-| `subscription_required` | Give the user a `checkout_urls` link from the error or `get_account` |
+| `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
 | `not_a_draft` | Sent documents can't be edited; void and create a new one |
 | `pro_required` | Templates and webhooks need the Pro plan |
+| `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
 Never send a document, remind signers or void a document without the user's explicit confirmation: these email real people.
 

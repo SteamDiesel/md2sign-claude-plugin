@@ -13,7 +13,8 @@ Input: $ARGUMENTS
 2. Run `validate_markdown` and fix every error.
 3. Run `render_preview`, summarise the document and list each signer with their email, and ask: "Send this to these signers?"
 4. Only after the user says yes: make sure there's an account (use `get_account`; if unauthenticated, follow the account step in the `contracts` skill), then `create_draft` and `send_document`.
-   - If sending is blocked by `email_unverified`, `subscription_required` or `quota_exceeded`, explain what the user needs to do, give them the link from the error, and tell them the draft is saved.
+   - A new account's first sent document is free (up to 5 signers, no plan needed, email must be confirmed). `get_account` shows `free_document_available`. If it's their free document, tell them so before sending.
+   - If sending is blocked by `email_unverified`, `free_document_limit` (more than 5 signers on the free document), `subscription_required` or `quota_exceeded`, explain what the user needs to do, give them the link from the error, and tell them the draft is saved.
 5. Confirm what was sent and to whom, and offer to check signing progress later with `get_document`.
 
 If the user only wants to check it first, offer `test_send_document` (a free watermarked copy to themselves) instead of sending.
