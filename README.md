@@ -36,7 +36,7 @@ Validation and previews work without an account. To save and send documents, add
 /plugin configure md2sign@md2sign
 ```
 
-Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email, then choose a plan (from US$4.76/month for 50 signature requests). You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
+Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email, then choose a plan (from US$7.50/month for 50 signature requests). You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
 
 ## Try it
 

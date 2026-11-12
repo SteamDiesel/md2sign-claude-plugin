@@ -34,7 +34,7 @@ Call `get_markdown_spec` for the full rules and an example.
 4. **Account.** Tools that save or send need an API key.
    - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
-   - The user must click the confirmation email and subscribe (Starter US$4.76/mo for 50 signature requests, Pro US$26.41/mo for 500) before anything reaches signers. `get_account` returns plan, usage and checkout links.
+   - The user must click the confirmation email and subscribe (Starter US$7.50/mo for 50 signature requests, Pro US$26.41/mo for 500) before anything reaches signers. `get_account` returns plan, usage and checkout links.
 5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
 6. **Send** with `send_document` only after the user confirms. It emails every signer. Then use `get_document` or `list_documents` to report who has signed, `remind_recipients` to nudge, `void_document` to cancel, and `get_audit_trail` for the evidence.
 
