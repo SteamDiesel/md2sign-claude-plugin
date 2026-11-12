@@ -1,6 +1,6 @@
 {
   "name": "md2sign",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Draft contracts in markdown and send them for legally binding e-signature with md2sign.",
   "author": {
     "name": "md2sign",
@@ -12,5 +12,15 @@
   "license": "MIT",
   "icon": ".claude-plugin/icon.png",
   "privacyPolicyUrl": "https://md2sign.com/privacy",
-  "keywords": ["e-signature", "contracts", "markdown", "mcp"]
+  "keywords": ["e-signature", "contracts", "markdown", "mcp"],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "md2sign API key",
+      "description": "Optional. Create one at https://md2sign.com/app/api-keys. Leave blank to start: Claude can validate and preview without it, and can create an account for you.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    }
+  }
 }

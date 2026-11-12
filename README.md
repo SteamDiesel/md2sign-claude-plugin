@@ -30,14 +30,13 @@ claude plugin install md2sign@md2sign
 
 ## Connect your account
 
-Validation and previews work without an account. To save and send documents, set your API key:
+Validation and previews work without an account. To save and send documents, add your API key when Claude Code asks during install. It's stored in your system's secure credential store. You can skip it and add or change it later:
 
-```bash
-export MD2SIGN_API_KEY="your key"   # macOS / Linux
-setx MD2SIGN_API_KEY "your key"     # Windows (then open a new terminal)
+```
+/plugin configure md2sign@md2sign
 ```
 
-Then restart Claude Code. Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email, then choose a plan (from US$4.76/month for 50 signature requests). You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
+Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email, then choose a plan (from US$4.76/month for 50 signature requests). You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
 
 ## Try it
 

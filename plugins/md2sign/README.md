@@ -16,6 +16,6 @@ This plugin adds:
 
 ## Setup
 
-Set `MD2SIGN_API_KEY` to your md2sign API key (from md2sign.com → API keys) and restart Claude Code. Without a key, validation and previews still work, and Claude can create an account for you with the `create_account` tool. Sending needs a confirmed email and a plan, from US$4.76/month for 50 signature requests.
+When you install, Claude Code asks for your md2sign API key (from md2sign.com → API keys) and stores it securely. You can leave it blank and add it later with `/plugin configure md2sign@md2sign`. Without a key, validation and previews still work, and Claude can create an account for you with the `create_account` tool. Sending needs a confirmed email and a plan, from US$4.76/month for 50 signature requests.
 
 Privacy: https://md2sign.com/privacy · Terms: https://md2sign.com/terms · Support: support@md2sign.com

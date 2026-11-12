@@ -32,7 +32,7 @@ Call `get_markdown_spec` for the full rules and an example.
 2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given) and mention any warnings.
 3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Get their explicit go-ahead before anything is sent.
 4. **Account.** Tools that save or send need an API key.
-   - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it as the `MD2SIGN_API_KEY` environment variable and restart Claude Code so it's sent automatically.
+   - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - The user must click the confirmation email and subscribe (Starter US$4.76/mo for 50 signature requests, Pro US$26.41/mo for 500) before anything reaches signers. `get_account` returns plan, usage and checkout links.
 5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
