@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "md2sign": {
+      "type": "http",
+      "url": "https://md2sign.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MD2SIGN_API_KEY:-}"
+      }
+    }
+  }
+}

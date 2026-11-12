@@ -1,0 +1,16 @@
+{
+  "name": "md2sign",
+  "version": "1.0.0",
+  "description": "Draft contracts in markdown and send them for legally binding e-signature with md2sign.",
+  "author": {
+    "name": "md2sign",
+    "email": "support@md2sign.com",
+    "url": "https://md2sign.com"
+  },
+  "homepage": "https://md2sign.com/mcp",
+  "repository": "https://github.com/SteamDiesel/md2sign-claude-plugin",
+  "license": "MIT",
+  "icon": ".claude-plugin/icon.png",
+  "privacyPolicyUrl": "https://md2sign.com/privacy",
+  "keywords": ["e-signature", "contracts", "markdown", "mcp"]
+}

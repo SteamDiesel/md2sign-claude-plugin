@@ -1,0 +1,18 @@
+{
+  "name": "md2sign",
+  "description": "Send markdown contracts for legally binding e-signatures from Claude Code.",
+  "owner": {
+    "name": "md2sign",
+    "email": "support@md2sign.com"
+  },
+  "plugins": [
+    {
+      "name": "md2sign",
+      "source": "./plugins/md2sign",
+      "description": "Draft contracts in markdown and send them for e-signature with md2sign's MCP server: validate, preview, test-send, send and track signing.",
+      "category": "productivity",
+      "keywords": ["e-signature", "esignature", "contracts", "documents", "markdown", "mcp"],
+      "homepage": "https://md2sign.com"
+    }
+  ]
+}
