@@ -10,6 +10,7 @@ Get a document signed with md2sign. Follow the `contracts` skill for the markdow
 Input: $ARGUMENTS
 
 1. If the input is a file path, read it. If it describes a contract, draft it in md2sign markdown with one `[[signature: Full Name <email>]]` field per signer. If anything essential is missing (signer names, emails, key terms), ask before drafting.
+   - Add only the people who must agree. For quotes, consents, acknowledgements, waivers and one-way NDAs, only the recipient signs. For two-sided agreements (services or contractor agreements, mutual NDAs, leases, partnerships), ask "Do you want to sign this too?" and, if yes, pass `sender_signs: true` when creating the draft rather than writing their field yourself.
 2. Run `validate_markdown` and fix every error.
 3. Run `render_preview`, summarise the document and list each signer with their email, and ask: "Send this to these signers?"
 4. Only after the user says yes: make sure there's an account (use `get_account`; if unauthenticated, follow the account step in the `contracts` skill), then `create_draft` and `send_document`.

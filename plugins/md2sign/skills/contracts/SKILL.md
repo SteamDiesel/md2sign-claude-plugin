@@ -26,10 +26,19 @@ Standard GitHub-flavoured markdown (headings, lists, tables, bold), plus one sig
 
 Call `get_markdown_spec` for the full rules and an example.
 
+## Who needs to sign
+
+Add a signature field only for people who must agree to the document. Don't add fields "just in case": every field emails a real person and uses a signature request.
+
+- **One-sided documents: only the recipient signs.** Quotes, proposals, consents, acknowledgements, waivers, one-way NDAs, engagement letters and offer or terms acceptances. Sending the document is the sender's offer or request, and the recipient's signature accepts it. Never add a field for the sender.
+- **Two-sided agreements: usually every party signs, including the sender.** Services and contractor agreements, mutual NDAs, leases, partnerships, settlements. Ask the user "Do you want to sign this too?" and add them only if they say yes.
+- **To add the sender,** pass `sender_signs: true` (and optionally `sender_role`, e.g. "Client") to `create_draft`, `update_draft` or `create_document_from_template`. md2sign adds a field with the account holder's name and email. Don't type the sender's field yourself; `sender_signs: false` removes it.
+- Every validation result includes `signing_advice`: `document_kind` (`two_sided`, `one_sided` or `unknown`), `sender_should_sign` and a `message`. Use it, but the user's answer wins.
+
 ## Workflow
 
 1. **Draft** the document in markdown with the user's real terms. Keep it plain and readable; md2sign is not a law firm, so suggest the user has important contracts reviewed.
-2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given) and mention any warnings.
+2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given), mention any warnings, and check `signing_advice` to decide whether the sender should sign (see "Who needs to sign").
 3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Get their explicit go-ahead before anything is sent.
 4. **Account.** Tools that save or send need an API key.
    - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.

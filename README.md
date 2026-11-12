@@ -48,7 +48,7 @@ or just say: *"Draft a contractor agreement with Sam Lee for $4,800, 50% upfront
 
 ## How it works
 
-You write (or Claude writes) normal markdown with one line per signer:
+You write (or Claude writes) normal markdown with one line for each person who needs to sign. Claude only adds you as a signer for two-sided agreements, and asks first; quotes, consents and acknowledgements just need the recipient:
 
 ```markdown
 [[signature: Sam Lee <sam@acme.com> | role: Contractor]]
