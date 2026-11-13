@@ -20,6 +20,7 @@ Standard GitHub-flavoured markdown (headings, lists, tables, bold), plus one sig
 - Optional hidden directives at the top (not shown to signers):
   - `<!-- md2sign:style=classic -->` (or `modern`, `formal`)
   - `<!-- md2sign:title=Website Design Agreement -->` (otherwise the first `#` heading is the title)
+  - `<!-- md2sign:order=sequential -->` (Pro): signers sign one at a time, in the order their signature fields appear. Only the first is emailed when sent; each signature emails the next. Use it when order matters (e.g. the client signs before the director countersigns). Without it everyone is emailed at once.
 - Put signature fields at the end, under a heading such as `## Signatures`, with a bold label above each (e.g. `**Signed by the Client**`).
 
 ### Input fields (Pro)
@@ -69,6 +70,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 
 - **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`. Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
 - **Input fields:** `[[field: ...]]` blanks for signers to fill in (see the format above).
+- **Signing in order:** `<!-- md2sign:order=sequential -->`. `get_document` returns `signing_order` and `next_signer`; `remind_recipients` only reminds the person whose turn it is.
 - **Webhooks:** `list_webhooks`, `save_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only.
 
 ## Errors you'll see
@@ -81,7 +83,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 | `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
 | `not_a_draft` | Sent documents can't be edited; void and create a new one |
-| `pro_required` | Templates, webhooks and input fields need the Pro plan; suggest Pro, or remove the input fields |
+| `pro_required` | Templates, webhooks, input fields and signing in order need the Pro plan; suggest Pro, or remove the fields or the order directive |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
