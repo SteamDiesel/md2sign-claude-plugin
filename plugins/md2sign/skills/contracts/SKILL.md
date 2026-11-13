@@ -37,6 +37,7 @@ When a signer must supply details (start date, job title, ABN, PO number, an "I 
 - `type:` is `text` (default), `date` or `checkbox`. Fields are optional unless `| required` is added.
 - Fields can sit inline, mid-sentence. Values are sealed with that signer's signature, appear in the signed PDF, and come back in `input_fields` on the document.
 - Don't use fields for things the sender already knows; write those into the document.
+- **Never add a "date signed" field** (or a blank `Date: ______` line under a signature). Every signature already records a tamper-proof UTC timestamp that appears on the signature line and the certificate. A hand-typed date adds friction, and one that disagrees with the recorded time can undermine the signature. If a Word import or the user's draft has "Date:" lines in the signature blocks, remove them and explain why. Validation warns with `redundant_signing_date`. Date fields are for other dates (start date, date of birth).
 - **Pro plan only.** Sending a document with input fields returns `pro_required` on other plans and on the free first document. Check `get_account` → `pro_features.input_fields` first; if it's false, leave blanks out (or ask the user to fill those details in themselves) unless they want to upgrade.
 - Signers sign in parallel; there is no signing order.
 - Never invent signer names or emails. Ask the user if they're missing.
