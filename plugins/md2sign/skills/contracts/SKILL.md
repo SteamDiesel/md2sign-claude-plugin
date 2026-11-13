@@ -21,6 +21,22 @@ Standard GitHub-flavoured markdown (headings, lists, tables, bold), plus one sig
   - `<!-- md2sign:style=classic -->` (or `modern`, `formal`)
   - `<!-- md2sign:title=Website Design Agreement -->` (otherwise the first `#` heading is the title)
 - Put signature fields at the end, under a heading such as `## Signatures`, with a bold label above each (e.g. `**Signed by the Client**`).
+
+### Input fields (Pro)
+
+When a signer must supply details (start date, job title, ABN, PO number, an "I have read X" tick), add an input field instead of leaving a blank line:
+
+```
+[[field: Start date | for: jane@example.com | type: date | required]]
+[[field: PO number | for: any]]
+[[field: I have read the safety policy | for: jane@example.com | type: checkbox | required]]
+```
+
+- `for:` is a signer's email (they must also have a signature field) or `any` (the default): any signer may fill it, the first to sign with a value locks it.
+- `type:` is `text` (default), `date` or `checkbox`. Fields are optional unless `| required` is added.
+- Fields can sit inline, mid-sentence. Values are sealed with that signer's signature, appear in the signed PDF, and come back in `input_fields` on the document.
+- Don't use fields for things the sender already knows; write those into the document.
+- **Pro plan only.** Sending a document with input fields returns `pro_required` on other plans and on the free first document. Check `get_account` → `pro_features.input_fields` first; if it's false, leave blanks out (or ask the user to fill those details in themselves) unless they want to upgrade.
 - Signers sign in parallel; there is no signing order.
 - Never invent signer names or emails. Ask the user if they're missing.
 
@@ -52,6 +68,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 ## Pro features
 
 - **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`. Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
+- **Input fields:** `[[field: ...]]` blanks for signers to fill in (see the format above).
 - **Webhooks:** `list_webhooks`, `save_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only.
 
 ## Errors you'll see
@@ -64,7 +81,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 | `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
 | `not_a_draft` | Sent documents can't be edited; void and create a new one |
-| `pro_required` | Templates and webhooks need the Pro plan |
+| `pro_required` | Templates, webhooks and input fields need the Pro plan; suggest Pro, or remove the input fields |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
