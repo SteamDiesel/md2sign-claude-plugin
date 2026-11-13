@@ -58,7 +58,7 @@ You write (or Claude writes) normal markdown with one line for each person who n
 
 md2sign emails each signer a link to a clean signing page. Every signature is SHA-256 hash-chained and Ed25519 sealed, and everyone gets the signed PDF with an audit certificate. Anyone can check a document's seal at its public verification page.
 
-Pro (US$26.41/month) adds team members, your logo on emails and PDFs, versioned templates with `{{ variables }}`, and webhooks that post signed contracts to your CRM or automations.
+Pro (US$39/month, or US$390/year) adds team members, your logo on emails and PDFs, versioned templates with `{{ variables }}`, and webhooks that post signed contracts to your CRM or automations.
 
 ## Links
 
