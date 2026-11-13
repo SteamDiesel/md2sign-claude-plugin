@@ -1,6 +1,6 @@
 ---
 name: contracts
-description: Draft contracts and agreements in md2sign markdown and get them signed through the md2sign MCP tools. Use when the user asks to write, format, prepare, preview, send or track a contract, agreement, NDA, quote acceptance or any document that needs signatures, or mentions md2sign or e-signatures.
+description: Draft contracts and agreements in md2sign markdown and get them signed through the md2sign MCP tools. Use when the user asks to write, format, prepare, preview, send or track a contract, agreement, NDA, quote acceptance or any document that needs signatures, wants a Word (.docx or .doc) contract signed, or mentions md2sign or e-signatures.
 ---
 
 # md2sign: markdown contracts to e-signatures
@@ -38,6 +38,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 ## Workflow
 
 1. **Draft** the document in markdown with the user's real terms. Keep it plain and readable; md2sign is not a law firm, so suggest the user has important contracts reviewed.
+   - **Word files:** if the user already has the contract as a .docx or .doc, don't retype it. Base64-encode the file and call `import_word_document` (needs an account). It returns `markdown`, a suggested `title` and `import_warnings` (images dropped, tracked changes accepted, old .doc files keep text, bold and italics only). Tell the user about the warnings, check the wording survived, then add the signature fields.
 2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given), mention any warnings, and check `signing_advice` to decide whether the sender should sign (see "Who needs to sign").
 3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Get their explicit go-ahead before anything is sent.
 4. **Account.** Tools that save or send need an API key.
@@ -63,6 +64,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
 | `not_a_draft` | Sent documents can't be edited; void and create a new one |
 | `pro_required` | Templates and webhooks need the Pro plan |
+| `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
 Never send a document, remind signers or void a document without the user's explicit confirmation: these email real people.

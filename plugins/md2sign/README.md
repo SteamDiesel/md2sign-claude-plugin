@@ -4,7 +4,7 @@ Draft contracts in markdown and send them for legally binding e-signature with [
 
 This plugin adds:
 
-- **The md2sign MCP server** (`https://md2sign.com/mcp`). Claude can validate and preview a document with no account, and once you've connected your account it can save drafts, send a free watermarked test copy to you, send for signature, and track who has signed.
+- **The md2sign MCP server** (`https://md2sign.com/mcp`). Claude can validate and preview a document with no account, and once you've connected your account it can convert your Word (.docx or .doc) contracts to markdown, save drafts, send a free watermarked test copy to you, send for signature, and track who has signed.
 - **The `contracts` skill.** It teaches Claude the md2sign markdown format (one `[[signature: Full Name <email>]]` line per signer) and a safe workflow: it validates, shows you a preview and asks before emailing anyone.
 - **`/md2sign:send`**, a guided draft → preview → confirm → send command.
 

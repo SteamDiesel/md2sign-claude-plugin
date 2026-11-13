@@ -2,7 +2,7 @@
 
 Ask Claude to draft a contract and get it signed. This plugin connects Claude Code to [md2sign](https://md2sign.com): markdown in, legally binding e-signatures out, usually about three minutes from asking to sending.
 
-- **MCP server**: `https://md2sign.com/mcp`, to validate, preview, draft, test-send, send and track documents
+- **MCP server**: `https://md2sign.com/mcp`, to import Word files, validate, preview, draft, test-send, send and track documents
 - **`contracts` skill**: teaches Claude the md2sign markdown format and a safe workflow (it always previews and asks before emailing anyone)
 - **`/md2sign:send`**: a guided "draft, preview, confirm, send" command
 
