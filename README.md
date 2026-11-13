@@ -38,6 +38,8 @@ Validation and previews work without an account. To save and send documents, add
 
 Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email. **Your first document is free**: send one real contract to up to 5 signers and get the sealed, signed PDF, with no subscription. After that, plans start at US$7.50/month for 50 signature requests. You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
 
+**Using claude.ai or Claude Desktop instead of Claude Code?** You don't need this plugin or an API key there. Add md2sign as a connector (Settings → Connectors → Add custom connector, address `https://md2sign.com/mcp/oauth`), then sign in to md2sign and click Approve.
+
 ## Try it
 
 ```

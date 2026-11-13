@@ -18,4 +18,6 @@ This plugin adds:
 
 When you install, Claude Code asks for your md2sign API key (from md2sign.com → API keys) and stores it securely. You can leave it blank and add it later with `/plugin configure md2sign@md2sign`. Without a key, validation and previews still work, and Claude can create an account for you with the `create_account` tool. Once your email is confirmed, your **first document is free** (up to 5 signers, no subscription). After that, sending needs a plan, from US$7.50/month for 50 signature requests.
 
+**Using claude.ai or Claude Desktop instead of Claude Code?** You don't need this plugin or an API key there. Add md2sign as a connector (Settings → Connectors → Add custom connector, address `https://md2sign.com/mcp/oauth`), then sign in to md2sign and click Approve.
+
 Privacy: https://md2sign.com/privacy · Terms: https://md2sign.com/terms · Support: support@md2sign.com
