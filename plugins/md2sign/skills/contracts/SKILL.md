@@ -53,14 +53,27 @@ Add a signature field only for people who must agree to the document. Don't add 
 - **To add the sender,** pass `sender_signs: true` (and optionally `sender_role`, e.g. "Client") to `create_draft`, `update_draft` or `create_document_from_template`. md2sign adds a field with the account holder's name and email. Don't type the sender's field yourself; `sender_signs: false` removes it.
 - Every validation result includes `signing_advice`: `document_kind` (`two_sided`, `one_sided` or `unknown`), `sender_should_sign` and a `message`. Use it, but the user's answer wins.
 
+## Guide the user
+
+Most people who ask for a contract aren't technical and won't know what to ask for. "Draft a contract for X and send it to Y" may be all you get. Lead them through it, and offer each of these before anything is sent:
+
+- **Missing details:** ask in plain words for names, emails, amounts, dates and addresses. Don't leave `[PLACEHOLDERS]` in the document.
+- **Look and style:** after `create_draft`, give them the `preview_url`. It opens in any browser for 7 days, needs no sign-in, and has a switcher to compare the Classic, Modern and Formal styles. Ask which one they like, then apply it with `update_draft` `style`.
+- **Proofreading:** summarise the key terms, then list every term you added that they didn't ask for, any assumptions you made, and anything still missing.
+- **Test copy:** offer `test_send_document`, so they see the exact email in their own inbox.
+- **Pro extras that fit:** input fields, signing in order, or `verify_signers` when it matters who signs.
+
+Send only when they clearly say to send.
+
 ## Workflow
 
 1. **Draft** the document in markdown with the user's real terms. Keep it plain and readable; md2sign is not a law firm, so suggest the user has important contracts reviewed.
    - **Word files:** if the user already has the contract as a .docx or .doc, don't retype it. Base64-encode the file and call `import_word_document` (needs an account). It returns `markdown`, a suggested `title` and `import_warnings` (images dropped, tracked changes accepted, old .doc files keep text, bold and italics only). Tell the user about the warnings, check the wording survived, then add the signature fields.
 2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given), mention any warnings, and check `signing_advice` to decide whether the sender should sign (see "Who needs to sign").
-3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Get their explicit go-ahead before anything is sent.
+3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Once the document is saved as a draft (step 5), give them its `preview_url` and ask which style they like. Get their explicit go-ahead before anything is sent.
 4. **Account.** Tools that save or send need an API key.
    - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.
+   - **Several accounts** (for example two businesses): keep each account's API key and pass the right one as `api_key` on every call. An `api_key` argument overrides the connection's own sign-in, including OAuth and a configured key. Check with `get_account` (`user.email`, `authenticated_with`) before you save or send. If a key is wrong you get `invalid_api_key`; the tool doesn't fall back to another account.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - If md2sign is connected through OAuth (for example as a claude.ai connector at `https://md2sign.com/mcp/oauth`), tools are already signed in as the user: don't ask for a key or call `create_account`.
    - The user must click the confirmation email. Their **first sent document is free** (up to 5 signers, no subscription), so they can see the whole flow work. After that they need a plan (Starter US$7.50/mo for 50 signature requests, Pro US$39/mo for 500). Yearly billing is 12 months for the price of 10 (US$75 or US$390 a year). `get_account` returns `free_document_available`, plan, usage, `checkout_urls` (monthly) and `annual_checkout_urls` (yearly).
@@ -81,6 +94,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 |---|---|
 | `invalid_document` | Fix the listed markdown errors, then validate again |
 | `unauthenticated` | Create an account or pass the user's API key (see step 4) |
+| `invalid_api_key` | The `api_key` you passed isn't valid. Ask the user for the right key (md2sign.com/app/api-keys) |
 | `email_unverified` | Ask the user to click the confirmation link in their email |
 | `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
