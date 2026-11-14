@@ -1,6 +1,6 @@
 {
   "name": "md2sign",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Draft contracts in markdown and send them for legally binding e-signature with md2sign.",
   "author": {
     "name": "md2sign",
