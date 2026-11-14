@@ -18,5 +18,6 @@ Input: $ARGUMENTS
    - A new account's first sent document is free (up to 5 signers, no plan needed, email must be confirmed). `get_account` shows `free_document_available`. If it's their free document, tell them so before sending.
    - If sending is blocked by `email_unverified`, `free_document_limit` (more than 5 signers on the free document), `subscription_required` or `quota_exceeded`, explain what the user needs to do, give them the link from the error, and tell them the draft is saved.
 5. Confirm what was sent and to whom, and offer to check signing progress later with `get_document`.
+6. If the user later wants changes to the sent document, make a new draft, share its `preview_url`, and void and re-send only after they approve the new version.
 
 If the user only wants to check it first, offer `test_send_document` (a free watermarked copy to themselves) instead of sending.

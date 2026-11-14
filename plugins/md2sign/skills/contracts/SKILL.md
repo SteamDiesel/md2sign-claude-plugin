@@ -63,7 +63,11 @@ Most people who ask for a contract aren't technical and won't know what to ask f
 - **Test copy:** offer `test_send_document`, so they see the exact email in their own inbox.
 - **Pro extras that fit:** input fields, signing in order, or `verify_signers` when it matters who signs.
 
+Show documents only through `preview_url` or `render_preview`. Never point the user at files on their computer.
+
 Send only when they clearly say to send.
+
+**Changes after sending:** if the user wants a sent document changed, make the new version as a draft and share its `preview_url` first. Void the old one and send the new one only after they've seen it and said yes, even if they asked you to "re-send".
 
 ## Workflow
 
@@ -72,7 +76,8 @@ Send only when they clearly say to send.
 2. **Validate** with `validate_markdown`. It needs no account. Fix every error (line numbers are given), mention any warnings, and check `signing_advice` to decide whether the sender should sign (see "Who needs to sign").
 3. **Preview** with `render_preview` (no account needed) and show the user what signers will see. Once the document is saved as a draft (step 5), give them its `preview_url` and ask which style they like. Get their explicit go-ahead before anything is sent.
 4. **Account.** Tools that save or send need an API key.
-   - If tools return `unauthenticated` and the user has no account, call `create_account` with their name and email (and company name if they want it shown to signers). It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.
+   - If tools return `unauthenticated` and the user has no account, ask for their full name and business name (if they have one), then call `create_account` with those and their email. Recipients see emails from "<business> via md2sign", so never guess the name from the email address. It returns an `api_key`. Pass it as the `api_key` argument to later tools in this session, and tell the user to save it by running `/plugin configure md2sign@md2sign` so it's sent automatically from then on.
+   - **Wrong name or business name** on an account (it shows in every email): fix it with `update_account` (`name`, `company_name`; an empty `company_name` removes it; only the company admin can change it).
    - **Several accounts** (for example two businesses): keep each account's API key and pass the right one as `api_key` on every call. An `api_key` argument overrides the connection's own sign-in, including OAuth and a configured key. Check with `get_account` (`user.email`, `authenticated_with`) before you save or send. If a key is wrong you get `invalid_api_key`; the tool doesn't fall back to another account.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - If md2sign is connected through OAuth (for example as a claude.ai connector at `https://md2sign.com/mcp/oauth`), tools are already signed in as the user: don't ask for a key or call `create_account`.
@@ -94,13 +99,14 @@ Send only when they clearly say to send.
 |---|---|
 | `invalid_document` | Fix the listed markdown errors, then validate again |
 | `unauthenticated` | Create an account or pass the user's API key (see step 4) |
+| `nothing_to_update` | Call `update_account` with `name`, `company_name` or both |
 | `invalid_api_key` | The `api_key` you passed isn't valid. Ask the user for the right key (md2sign.com/app/api-keys) |
 | `email_unverified` | Ask the user to click the confirmation link in their email |
 | `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
 | `not_a_draft` | Sent documents can't be edited or deleted; void and create a new one |
 | `not_sent` | Drafts have no PDF yet; use `render_preview` or `test_send_document` |
-| `admin_required` | Only the company admin (or, for a template, its creator) can do this; ask them |
+| `admin_required` | Only the company admin (or, for a template, its creator) can do this, including changing the company name; ask them |
 | `not_found` | Wrong ID, or the document belongs to someone else in the company; check `list_documents` |
 | `pro_required` | Templates, webhooks, input fields, signing in order and signer email verification need the Pro plan; suggest Pro, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
