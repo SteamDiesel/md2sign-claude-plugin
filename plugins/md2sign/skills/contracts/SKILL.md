@@ -21,6 +21,7 @@ Standard GitHub-flavoured markdown (headings, lists, tables, bold), plus one sig
   - `<!-- md2sign:style=classic -->` (or `modern`, `formal`)
   - `<!-- md2sign:title=Website Design Agreement -->` (otherwise the first `#` heading is the title)
   - `<!-- md2sign:order=sequential -->` (Pro): signers sign one at a time, in the order their signature fields appear. Only the first is emailed when sent; each signature emails the next. Use it when order matters (e.g. the client signs before the director countersigns). Without it everyone is emailed at once.
+  - `<!-- md2sign:verify=email -->` (Pro): after typing their name, each signer is emailed a 6-digit code and must enter it within 15 minutes before their signature is recorded. It stops someone who was forwarded the signing link from signing as the recipient, and the confirmation time is sealed into the signature. `verify=none` turns it off for one document when the account has it on by default. Prefer the `verify_signers` argument (below) to typing the directive.
 - Put signature fields at the end, under a heading such as `## Signatures`, with a bold label above each (e.g. `**Signed by the Client**`).
 
 ### Input fields (Pro)
@@ -39,7 +40,6 @@ When a signer must supply details (start date, job title, ABN, PO number, an "I 
 - Don't use fields for things the sender already knows; write those into the document.
 - **Never add a "date signed" field** (or a blank `Date: ______` line under a signature). Every signature already records a tamper-proof UTC timestamp that appears on the signature line and the certificate. A hand-typed date adds friction, and one that disagrees with the recorded time can undermine the signature. If a Word import or the user's draft has "Date:" lines in the signature blocks, remove them and explain why. Validation warns with `redundant_signing_date`. Date fields are for other dates (start date, date of birth).
 - **Pro plan only.** Sending a document with input fields returns `pro_required` on other plans and on the free first document. Check `get_account` → `pro_features.input_fields` first; if it's false, leave blanks out (or ask the user to fill those details in themselves) unless they want to upgrade.
-- Signers sign in parallel; there is no signing order.
 - Never invent signer names or emails. Ask the user if they're missing.
 
 Call `get_markdown_spec` for the full rules and an example.
@@ -72,6 +72,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 - **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`, `delete_template` (the template's creator or the company admin; documents made from it are kept). Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
 - **Input fields:** `[[field: ...]]` blanks for signers to fill in (see the format above).
 - **Signing in order:** `<!-- md2sign:order=sequential -->`. `get_document` returns `signing_order` and `next_signer`; `remind_recipients` only reminds the person whose turn it is.
+- **Signer email verification:** pass `verify_signers: true` to `create_draft`, `update_draft` or `create_document_from_template` to make every signer confirm a code emailed to them before signing (`false` turns it off for that document; omit it to use the account default). Suggest it for high-value or sensitive agreements, or when the user worries about who actually signs. The user can turn it on for every document on their md2sign profile; `get_account` shows `user.verify_signers_by_default` and `pro_features.signer_verification`. Documents return `signer_verification` (`email` or `none`), fixed when sent. Tell the user signers will get a second email with a code, so they aren't surprised. It proves inbox access at signing time, not identity: don't call it two-factor or ID verification.
 - **Webhooks:** `list_webhooks`, `save_webhook`, `delete_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only. To pause an endpoint without deleting it, use `save_webhook` with `is_active: false`.
 
 ## Errors you'll see
@@ -87,7 +88,7 @@ Add a signature field only for people who must agree to the document. Don't add 
 | `not_sent` | Drafts have no PDF yet; use `render_preview` or `test_send_document` |
 | `admin_required` | Only the company admin (or, for a template, its creator) can do this; ask them |
 | `not_found` | Wrong ID, or the document belongs to someone else in the company; check `list_documents` |
-| `pro_required` | Templates, webhooks, input fields and signing in order need the Pro plan; suggest Pro, or remove the fields or the order directive |
+| `pro_required` | Templates, webhooks, input fields, signing in order and signer email verification need the Pro plan; suggest Pro, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
