@@ -64,15 +64,15 @@ Add a signature field only for people who must agree to the document. Don't add 
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - If md2sign is connected through OAuth (for example as a claude.ai connector at `https://md2sign.com/mcp/oauth`), tools are already signed in as the user: don't ask for a key or call `create_account`.
    - The user must click the confirmation email. Their **first sent document is free** (up to 5 signers, no subscription), so they can see the whole flow work. After that they need a plan (Starter US$7.50/mo for 50 signature requests, Pro US$39/mo for 500). Yearly billing is 12 months for the price of 10 (US$75 or US$390 a year). `get_account` returns `free_document_available`, plan, usage, `checkout_urls` (monthly) and `annual_checkout_urls` (yearly).
-5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
-6. **Send** with `send_document` only after the user confirms. It emails every signer. Then use `get_document` or `list_documents` to report who has signed, `remind_recipients` to nudge, `void_document` to cancel, and `get_audit_trail` for the evidence.
+5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`; `delete_document` permanently removes a draft the user no longer wants). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
+6. **Send** with `send_document` only after the user confirms. It emails every signer. Then use `get_document` or `list_documents` to report who has signed, `remind_recipients` to nudge, `void_document` to cancel, `get_audit_trail` for the evidence, and `get_document_pdf` for the PDF. It returns a `download_url` that needs no API key and expires after 30 minutes, so give it to the user or download it straight away; `signed_and_sealed` says whether everyone has signed.
 
 ## Pro features
 
-- **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`. Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
+- **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`, `delete_template` (the template's creator or the company admin; documents made from it are kept). Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
 - **Input fields:** `[[field: ...]]` blanks for signers to fill in (see the format above).
 - **Signing in order:** `<!-- md2sign:order=sequential -->`. `get_document` returns `signing_order` and `next_signer`; `remind_recipients` only reminds the person whose turn it is.
-- **Webhooks:** `list_webhooks`, `save_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only.
+- **Webhooks:** `list_webhooks`, `save_webhook`, `delete_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only. To pause an endpoint without deleting it, use `save_webhook` with `is_active: false`.
 
 ## Errors you'll see
 
@@ -83,11 +83,14 @@ Add a signature field only for people who must agree to the document. Don't add 
 | `email_unverified` | Ask the user to click the confirmation link in their email |
 | `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
 | `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
-| `not_a_draft` | Sent documents can't be edited; void and create a new one |
+| `not_a_draft` | Sent documents can't be edited or deleted; void and create a new one |
+| `not_sent` | Drafts have no PDF yet; use `render_preview` or `test_send_document` |
+| `admin_required` | Only the company admin (or, for a template, its creator) can do this; ask them |
+| `not_found` | Wrong ID, or the document belongs to someone else in the company; check `list_documents` |
 | `pro_required` | Templates, webhooks, input fields and signing in order need the Pro plan; suggest Pro, or remove the fields or the order directive |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 
-Never send a document, remind signers or void a document without the user's explicit confirmation: these email real people.
+Never send a document, remind signers or void a document without the user's explicit confirmation: these email real people. Confirm before deleting a draft, template or webhook too: deletes can't be undone.
 
 Docs: https://md2sign.com/docs
