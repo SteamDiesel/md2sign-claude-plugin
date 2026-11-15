@@ -16,7 +16,7 @@ This plugin adds:
 
 ## Setup
 
-When you install, Claude Code asks for your md2sign API key (from md2sign.com → API keys) and stores it securely. You can leave it blank and add it later with `/plugin configure md2sign@md2sign`. Without a key, validation and previews still work, and Claude can create an account for you with the `create_account` tool. Once your email is confirmed, choose a plan: **every plan starts with a 7-day free trial** (add a card, and you're not charged until it ends). Plans count envelopes, one per document sent however many sign it: Solo Lite US$45/year for 60 a year, Solo US$7.50/month for 30 a month, Team US$19/month for 100, Business+ US$39/month for 500.
+When you install, Claude Code asks for your md2sign API key (from md2sign.com → API keys) and stores it securely. You can leave it blank and add it later with `/plugin configure md2sign@md2sign`. Without a key, validation and previews still work, and Claude can create an account for you with the `create_account` tool. Once your email is confirmed, choose a plan: **every plan starts with a 7-day free trial** (one per person and company) (add a card, and you're not charged until it ends). Plans count envelopes, one per document sent however many sign it: Solo Lite US$45/year for 60 a year, Solo US$7.50/month for 30 a month, Team US$19/month for 100, Business+ US$39/month for 500.
 
 **Two businesses?** Give Claude each md2sign account's API key and say which business a document is for. Claude passes that account's key on each call, so the right business sends it.
 
