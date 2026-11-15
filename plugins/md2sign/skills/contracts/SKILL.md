@@ -16,15 +16,15 @@ Standard GitHub-flavoured markdown (headings, lists, tables, bold), plus one sig
 [[signature: Sam Lee <sam@acme.com> | role: Director]]
 ```
 
-- Use each signer's **full name** (first and last) and a real email. One field = one signer = one signature request on the plan.
+- Use each signer's **full name** (first and last) and a real email. One field = one signer. A sent document uses one **envelope** on the plan, however many people sign it (up to 25 signers).
 - Optional hidden directives at the top (not shown to signers):
   - `<!-- md2sign:style=classic -->` (or `modern`, `formal`)
   - `<!-- md2sign:title=Website Design Agreement -->` (otherwise the first `#` heading is the title)
-  - `<!-- md2sign:order=sequential -->` (Pro): signers sign one at a time, in the order their signature fields appear. Only the first is emailed when sent; each signature emails the next. Use it when order matters (e.g. the client signs before the director countersigns). Without it everyone is emailed at once.
-  - `<!-- md2sign:verify=email -->` (Pro): after typing their name, each signer is emailed a 6-digit code and must enter it within 15 minutes before their signature is recorded. It stops someone who was forwarded the signing link from signing as the recipient, and the confirmation time is sealed into the signature. `verify=none` turns it off for one document when the account has it on by default. Prefer the `verify_signers` argument (below) to typing the directive.
+  - `<!-- md2sign:order=sequential -->` (Team plans): signers sign one at a time, in the order their signature fields appear. Only the first is emailed when sent; each signature emails the next. Use it when order matters (e.g. the client signs before the director countersigns). Without it everyone is emailed at once.
+  - `<!-- md2sign:verify=email -->` (Team plans): after typing their name, each signer is emailed a 6-digit code and must enter it within 15 minutes before their signature is recorded. It stops someone who was forwarded the signing link from signing as the recipient, and the confirmation time is sealed into the signature. `verify=none` turns it off for one document when the account has it on by default. Prefer the `verify_signers` argument (below) to typing the directive.
 - Put signature fields at the end, under a heading such as `## Signatures`, with a bold label above each (e.g. `**Signed by the Client**`).
 
-### Input fields (Pro)
+### Input fields (Team plans)
 
 When a signer must supply details (start date, job title, ABN, PO number, an "I have read X" tick), add an input field instead of leaving a blank line:
 
@@ -39,14 +39,14 @@ When a signer must supply details (start date, job title, ABN, PO number, an "I 
 - Fields can sit inline, mid-sentence. Values are sealed with that signer's signature, appear in the signed PDF, and come back in `input_fields` on the document.
 - Don't use fields for things the sender already knows; write those into the document.
 - **Never add a "date signed" field** (or a blank `Date: ______` line under a signature). Every signature already records a tamper-proof UTC timestamp that appears on the signature line and the certificate. A hand-typed date adds friction, and one that disagrees with the recorded time can undermine the signature. If a Word import or the user's draft has "Date:" lines in the signature blocks, remove them and explain why. Validation warns with `redundant_signing_date`. Date fields are for other dates (start date, date of birth).
-- **Pro plan only.** Sending a document with input fields returns `pro_required` on other plans and on the free first document. Check `get_account` → `pro_features.input_fields` first; if it's false, leave blanks out (or ask the user to fill those details in themselves) unless they want to upgrade.
+- **Team and Business+ plans only.** Sending a document with input fields returns `team_plan_required` on Solo Lite and Solo. Check `get_account` → `account.plan_features.input_fields` first; if it's false, leave blanks out (or ask the user to fill those details in themselves) unless they want to upgrade.
 - Never invent signer names or emails. Ask the user if they're missing.
 
 Call `get_markdown_spec` for the full rules and an example.
 
 ## Who needs to sign
 
-Add a signature field only for people who must agree to the document. Don't add fields "just in case": every field emails a real person and uses a signature request.
+Add a signature field only for people who must agree to the document. Don't add fields "just in case": every field emails a real person.
 
 - **One-sided documents: only the recipient signs.** Quotes, proposals, consents, acknowledgements, waivers, one-way NDAs, engagement letters and offer or terms acceptances. Sending the document is the sender's offer or request, and the recipient's signature accepts it. Never add a field for the sender.
 - **Two-sided agreements: usually every party signs, including the sender.** Services and contractor agreements, mutual NDAs, leases, partnerships, settlements. Ask the user "Do you want to sign this too?" and add them only if they say yes.
@@ -61,7 +61,7 @@ Most people who ask for a contract aren't technical and won't know what to ask f
 - **Look and style:** after `create_draft`, give them the `preview_url`. It opens in any browser for 7 days, needs no sign-in, and has a switcher to compare the Classic, Modern and Formal styles. Ask which one they like, then apply it with `update_draft` `style`.
 - **Proofreading:** summarise the key terms, then list every term you added that they didn't ask for, any assumptions you made, and anything still missing.
 - **Test copy:** offer `test_send_document`, so they see the exact email in their own inbox.
-- **Pro extras that fit:** input fields, signing in order, or `verify_signers` when it matters who signs.
+- **Team plan extras that fit:** input fields, signing in order, or `verify_signers` when it matters who signs.
 
 Show documents only through `preview_url` or `render_preview`. Never point the user at files on their computer.
 
@@ -81,17 +81,26 @@ Send only when they clearly say to send.
    - **Several accounts** (for example two businesses): keep each account's API key and pass the right one as `api_key` on every call. An `api_key` argument overrides the connection's own sign-in, including OAuth and a configured key. Check with `get_account` (`user.email`, `authenticated_with`) before you save or send. If a key is wrong you get `invalid_api_key`; the tool doesn't fall back to another account.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - If md2sign is connected through OAuth (for example as a claude.ai connector at `https://md2sign.com/mcp/oauth`), tools are already signed in as the user: don't ask for a key or call `create_account`.
-   - The user must click the confirmation email. Their **first sent document is free** (up to 5 signers, no subscription), so they can see the whole flow work. After that they need a plan (Starter US$7.50/mo for 50 signature requests, Pro US$39/mo for 500). Yearly billing is 12 months for the price of 10 (US$75 or US$390 a year). `get_account` returns `free_document_available`, plan, usage, `checkout_urls` (monthly) and `annual_checkout_urls` (yearly).
+   - The user must click the confirmation email, then choose a plan at checkout. **Every plan starts with a 7-day free trial**: they add a card and aren't charged until it ends, and cancelling before then costs nothing. During the trial they can send 3 envelopes, each with up to 5 signers. One trial per person and company.
+   - Plans count **envelopes**: one envelope is one document sent, however many people sign it.
+     - **Solo Lite** US$45/year for 60 envelopes a year (yearly only).
+     - **Solo** US$7.50/mo for 30 envelopes a month.
+     - **Team** US$19/mo for 100 a month, adding teammates on the company domain (no seat fees), the company logo, input fields, signing in order and signer email verification.
+     - **Business+** US$39/mo for 500 a month, with everything in Team.
+     - Yearly billing is 12 months for the price of 10 (US$75, US$190 or US$390 a year). Templates and webhooks come with every plan.
+   - `get_account` returns `account.plan`, `account.trial` (`on_trial`, `ends_at`, `available`), `account.usage` (`envelopes_used`, `envelopes_allowance`, `envelopes_remaining`, `top_up_envelopes`, `max_signers_per_envelope`), `account.plan_features`, `checkout_urls` (monthly) and `annual_checkout_urls` (yearly; Solo Lite is only here). Help the user pick: Solo Lite for a handful of contracts a year, Solo for regular solo use, Team when they want teammates, branding or the extras above.
 5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`; `delete_document` permanently removes a draft the user no longer wants). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
 6. **Send** with `send_document` only after the user confirms. It emails every signer. Then use `get_document` or `list_documents` to report who has signed, `remind_recipients` to nudge, `void_document` to cancel, `get_audit_trail` for the evidence, and `get_document_pdf` for the PDF. It returns a `download_url` that needs no API key and expires after 30 minutes, so give it to the user or download it straight away; `signed_and_sealed` says whether everyone has signed.
 
-## Pro features
+## Plan features
 
-- **Templates:** `list_templates`, `get_template`, `save_template`, `create_document_from_template`, `delete_template` (the template's creator or the company admin; documents made from it are kept). Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
+Every plan includes templates and webhooks. Input fields, signing in order, signer email verification, teammates and the company logo need the Team or Business+ plan.
+
+- **Templates (every plan):** `list_templates`, `get_template`, `save_template`, `create_document_from_template`, `delete_template` (the template's creator or the company admin; documents made from it are kept). Templates use `{{ variable_name }}` placeholders, including in signature fields: `[[signature: {{ client_name }} <{{ client_email }}>]]`.
 - **Input fields:** `[[field: ...]]` blanks for signers to fill in (see the format above).
 - **Signing in order:** `<!-- md2sign:order=sequential -->`. `get_document` returns `signing_order` and `next_signer`; `remind_recipients` only reminds the person whose turn it is.
-- **Signer email verification:** pass `verify_signers: true` to `create_draft`, `update_draft` or `create_document_from_template` to make every signer confirm a code emailed to them before signing (`false` turns it off for that document; omit it to use the account default). Suggest it for high-value or sensitive agreements, or when the user worries about who actually signs. The user can turn it on for every document on their md2sign profile; `get_account` shows `user.verify_signers_by_default` and `pro_features.signer_verification`. Documents return `signer_verification` (`email` or `none`), fixed when sent. Tell the user signers will get a second email with a code, so they aren't surprised. It proves inbox access at signing time, not identity: don't call it two-factor or ID verification.
-- **Webhooks:** `list_webhooks`, `save_webhook`, `delete_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only. To pause an endpoint without deleting it, use `save_webhook` with `is_active: false`.
+- **Signer email verification:** pass `verify_signers: true` to `create_draft`, `update_draft` or `create_document_from_template` to make every signer confirm a code emailed to them before signing (`false` turns it off for that document; omit it to use the account default). Suggest it for high-value or sensitive agreements, or when the user worries about who actually signs. The user can turn it on for every document on their md2sign profile; `get_account` shows `user.verify_signers_by_default` and `account.plan_features.signer_verification`. Documents return `signer_verification` (`email` or `none`), fixed when sent. Tell the user signers will get a second email with a code, so they aren't surprised. It proves inbox access at signing time, not identity: don't call it two-factor or ID verification.
+- **Webhooks (every plan; Solo Lite 1 endpoint, Solo 3, Team and Business+ 10):** `list_webhooks`, `save_webhook`, `delete_webhook` post document events (with the markdown and, on completion, the signed PDF) to Zapier, Make, n8n, a CRM or the user's own server. Admins only. To pause an endpoint without deleting it, use `save_webhook` with `is_active: false`.
 
 ## Errors you'll see
 
@@ -102,15 +111,16 @@ Send only when they clearly say to send.
 | `nothing_to_update` | Call `update_account` with `name`, `company_name` or both |
 | `invalid_api_key` | The `api_key` you passed isn't valid. Ask the user for the right key (md2sign.com/app/api-keys) |
 | `email_unverified` | Ask the user to click the confirmation link in their email |
-| `subscription_required` | The free first document has been used. Give the user a `checkout_urls` link from the error or `get_account` |
-| `quota_exceeded` | Not enough signature requests left this month; suggest Pro |
+| `subscription_required` | The account has no plan yet. Give the user a `checkout_urls` or `annual_checkout_urls` link from the error or `get_account`; their first plan starts with a 7-day free trial |
+| `quota_exceeded` | The plan's envelopes for this period are used up. The admin can buy extra envelopes (packs of 10 for US$5, using the `top_up_url` in the error) or upgrade; the allowance resets at `period_end` |
+| `trial_limit` | The free trial allows 3 envelopes with up to 5 signers each. Remove signers, or wait for the trial to end (`trial_ends_at`); the admin can also end the trial early from Billing to start the full plan now |
 | `not_a_draft` | Sent documents can't be edited or deleted; void and create a new one |
 | `not_sent` | Drafts have no PDF yet; use `render_preview` or `test_send_document` |
 | `admin_required` | Only the company admin (or, for a template, its creator) can do this, including changing the company name; ask them |
 | `not_found` | Wrong ID, or the document belongs to someone else in the company; check `list_documents` |
-| `pro_required` | Templates, webhooks, input fields, signing in order and signer email verification need the Pro plan; suggest Pro, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
+| `team_plan_required` | Input fields, signing in order, signer email verification and adding teammates need the Team or Business+ plan; suggest upgrading, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
+| `webhook_limit` | The plan's webhook endpoints are all in use; delete one or upgrade |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
-| `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
 | `sending_suspended` | Recipients reported this account's emails as unwanted, so md2sign has paused sending, reminders and test copies while it reviews the account. Don't retry or try another way to send. Tell the user plainly, and that they can still see their documents and appeal at the `appeal_email` in the error |
 | `recipient_opted_out` | The listed `emails` reported this account's emails or bounced, so md2sign won't email them for this account. Remove them from the document and suggest the user contacts them another way first |
 | `signup_blocked` | This email address (or its domain) can't be used for a new md2sign account. Give the user the `message`; don't try other addresses |

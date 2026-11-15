@@ -36,7 +36,7 @@ Validation and previews work without an account. To save and send documents, add
 /plugin configure md2sign@md2sign
 ```
 
-Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email. **Your first document is free**: send one real contract to up to 5 signers and get the sealed, signed PDF, with no subscription. After that, plans start at US$7.50/month for 50 signature requests. You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
+Don't have an account? Just ask Claude to send something: it can create one for you with the `create_account` tool. You'll get a confirmation email, then choose a plan. **Every plan starts with a 7-day free trial**: add a card, send up to 3 real contracts (up to 5 signers each) and get the sealed, signed PDFs, and you're not charged until the trial ends. Plans count envelopes (one per document sent, however many people sign it) and start at US$45/year for 60 envelopes (Solo Lite) or US$7.50/month for 30 a month (Solo). You can also sign up at [md2sign.com](https://md2sign.com) and create a key under **API keys**.
 
 **Using claude.ai or Claude Desktop instead of Claude Code?** You don't need this plugin or an API key there. Add md2sign as a connector (Settings → Connectors → Add custom connector, address `https://md2sign.com/mcp/oauth`), then sign in to md2sign and click Approve.
 
@@ -60,7 +60,7 @@ Before anything is sent, Claude shows you a preview link where you can compare t
 
 Every email to a signer also has a "Didn't expect this email? Report it" link. md2sign stops emailing anyone who reports an account, and pauses sending for accounts that several recipients report, so send documents only to people who expect them ([anti-spam policy](https://md2sign.com/anti-spam-policy)).
 
-Pro (US$39/month, or US$390/year) adds team members, your logo on emails and PDFs, versioned templates with `{{ variables }}`, input fields, signing in order, signer email verification (each signer confirms a code emailed to them before their signature counts), and webhooks that post signed contracts to your CRM or automations.
+Every plan includes versioned templates with `{{ variables }}` and webhooks that post signed contracts to your CRM or automations. Team (US$19/month for 100 envelopes) and Business+ (US$39/month for 500) add team members with no seat fees, your logo on emails and PDFs, input fields, signing in order and signer email verification (each signer confirms a code emailed to them before their signature counts). Yearly billing is 12 months for the price of 10.
 
 ## Links
 
