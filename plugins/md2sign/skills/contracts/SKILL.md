@@ -81,7 +81,7 @@ Send only when they clearly say to send.
    - **Several accounts** (for example two businesses): keep each account's API key and pass the right one as `api_key` on every call. An `api_key` argument overrides the connection's own sign-in, including OAuth and a configured key. Check with `get_account` (`user.email`, `authenticated_with`) before you save or send. If a key is wrong you get `invalid_api_key`; the tool doesn't fall back to another account.
    - If they already have an account, they can create a key at https://md2sign.com/app/api-keys.
    - If md2sign is connected through OAuth (for example as a claude.ai connector at `https://md2sign.com/mcp/oauth`), tools are already signed in as the user: don't ask for a key or call `create_account`.
-   - The user must click the confirmation email, then choose a plan at checkout. **Every plan starts with a 7-day free trial**: they add a card and aren't charged until it ends, and cancelling before then costs nothing. During the trial they can send 3 envelopes, each with up to 5 signers. One trial per person and company.
+   - The user must click the confirmation email, then choose a plan at checkout. **Every plan starts with a 7-day free trial**: they add a card and aren't charged until it ends, and cancelling before then costs nothing. During the trial they can send 3 envelopes, each with up to 5 signers. There's one trial per person and company: check `get_account` → `account.trial.available` before promising one. If it's false, the plan is charged at checkout (the checkout page says so too).
    - Plans count **envelopes**: one envelope is one document sent, however many people sign it.
      - **Solo Lite** US$45/year for 60 envelopes a year (yearly only).
      - **Solo** US$7.50/mo for 30 envelopes a month.
@@ -111,7 +111,7 @@ Every plan includes templates and webhooks. Input fields, signing in order, sign
 | `nothing_to_update` | Call `update_account` with `name`, `company_name` or both |
 | `invalid_api_key` | The `api_key` you passed isn't valid. Ask the user for the right key (md2sign.com/app/api-keys) |
 | `email_unverified` | Ask the user to click the confirmation link in their email |
-| `subscription_required` | The account has no plan yet. Give the user a `checkout_urls` or `annual_checkout_urls` link from the error or `get_account`; their first plan starts with a 7-day free trial |
+| `subscription_required` | The account has no plan yet. Give the user a `checkout_urls` or `annual_checkout_urls` link from the error or `get_account`; their first plan starts with a 7-day free trial if `account.trial.available` is true, otherwise it's charged at checkout |
 | `quota_exceeded` | The plan's envelopes for this period are used up. The admin can buy extra envelopes (packs of 10 for US$5, using the `top_up_url` in the error) or upgrade; the allowance resets at `period_end` |
 | `trial_limit` | The free trial allows 3 envelopes with up to 5 signers each. Remove signers, or wait for the trial to end (`trial_ends_at`); the admin can also end the trial early from Billing to start the full plan now |
 | `not_a_draft` | Sent documents can't be edited or deleted; void and create a new one |
