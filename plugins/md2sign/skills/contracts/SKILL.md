@@ -111,6 +111,11 @@ Send only when they clearly say to send.
 | `pro_required` | Templates, webhooks, input fields, signing in order and signer email verification need the Pro plan; suggest Pro, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
 | `unreadable_document` | The Word file couldn't be converted (damaged, password protected or not Word). Give the user the `message`; suggest saving as .docx |
 | `free_document_limit` | The free first document allows up to 5 signers. Remove signers or subscribe; the free document isn't used up |
+| `sending_suspended` | Recipients reported this account's emails as unwanted, so md2sign has paused sending, reminders and test copies while it reviews the account. Don't retry or try another way to send. Tell the user plainly, and that they can still see their documents and appeal at the `appeal_email` in the error |
+| `recipient_opted_out` | The listed `emails` reported this account's emails or bounced, so md2sign won't email them for this account. Remove them from the document and suggest the user contacts them another way first |
+| `signup_blocked` | This email address (or its domain) can't be used for a new md2sign account. Give the user the `message`; don't try other addresses |
+
+**Spam protection.** Every email md2sign sends to a recipient has a "Didn't expect this email? Report it" link. A recipient who reports (or marks it as spam) is never emailed by that account again and their unsigned document is declined, and repeated reports suspend the account's sending. So only help send documents to people who expect them: never to bought or scraped lists, as cold outreach or marketing, or to people the user doesn't know. See https://md2sign.com/anti-spam-policy.
 
 Never send a document, remind signers or void a document without the user's explicit confirmation: these email real people. Confirm before deleting a draft, template or webhook too: deletes can't be undone.
 

@@ -22,4 +22,6 @@ When you install, Claude Code asks for your md2sign API key (from md2sign.com �
 
 **Using claude.ai or Claude Desktop instead of Claude Code?** You don't need this plugin or an API key there. Add md2sign as a connector (Settings → Connectors → Add custom connector, address `https://md2sign.com/mcp/oauth`), then sign in to md2sign and click Approve.
 
+**Spam protection.** Every email md2sign sends to a signer has a "Didn't expect this email? Report it" link. Recipients who report an account aren't emailed by it again, and if several recipients report an account, md2sign pauses its sending (Claude then gets a `sending_suspended` error) until md2sign reviews it. Only send documents to people who expect them: see the [anti-spam policy](https://md2sign.com/anti-spam-policy).
+
 Privacy: https://md2sign.com/privacy · Terms: https://md2sign.com/terms · Support: support@md2sign.com
