@@ -58,6 +58,8 @@ You write (or Claude writes) normal markdown with one line for each person who n
 
 Before anything is sent, Claude shows you a preview link where you can compare the Classic, Modern and Formal styles, walks you through the wording, and offers a free test copy to your own inbox. md2sign emails each signer a link to a clean signing page. Every signature is SHA-256 hash-chained and Ed25519 sealed, and everyone gets the signed PDF with an audit certificate. Anyone can check a document's seal at its public verification page.
 
+Every email to a signer also has a "Didn't expect this email? Report it" link. md2sign stops emailing anyone who reports an account, and pauses sending for accounts that several recipients report, so send documents only to people who expect them ([anti-spam policy](https://md2sign.com/anti-spam-policy)).
+
 Pro (US$39/month, or US$390/year) adds team members, your logo on emails and PDFs, versioned templates with `{{ variables }}`, input fields, signing in order, signer email verification (each signer confirms a code emailed to them before their signature counts), and webhooks that post signed contracts to your CRM or automations.
 
 ## Links

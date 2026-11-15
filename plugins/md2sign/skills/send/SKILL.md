@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "[markdown or Word file, or describe the contract and signers]"
 ---
 
-Get a document signed with md2sign. Follow the `contracts` skill for the markdown format and tool details.
+Get a document signed with md2sign. Follow the `contracts` skill for the markdown format and tool details. Only send to people who expect the document: every email lets the recipient report it as unwanted, and repeated reports suspend the account's sending.
 
 Input: $ARGUMENTS
 
@@ -17,6 +17,7 @@ Input: $ARGUMENTS
 4. Only after the user says yes: make sure there's an account (use `get_account`; if unauthenticated, follow the account step in the `contracts` skill), then `send_document` (create the draft first if you haven't yet). If the user has more than one md2sign account, pass the right account's `api_key` on every call.
    - A new account's first sent document is free (up to 5 signers, no plan needed, email must be confirmed). `get_account` shows `free_document_available`. If it's their free document, tell them so before sending.
    - If sending is blocked by `email_unverified`, `free_document_limit` (more than 5 signers on the free document), `subscription_required` or `quota_exceeded`, explain what the user needs to do, give them the link from the error, and tell them the draft is saved.
+   - If it's blocked by `recipient_opted_out`, those signers reported this account's emails (or their address bounced): remove them and suggest the user contacts them directly. If it's `sending_suspended`, recipients have reported the account and md2sign is reviewing it: don't retry, tell the user, and give them the `appeal_email` from the error.
 5. Confirm what was sent and to whom, and offer to check signing progress later with `get_document`.
 6. If the user later wants changes to the sent document, make a new draft, share its `preview_url`, and void and re-send only after they approve the new version.
 
