@@ -60,7 +60,7 @@ Before anything is sent, Claude shows you a preview link where you can compare t
 
 Every email to a signer also has a "Didn't expect this email? Report it" link. md2sign stops emailing anyone who reports an account, and pauses sending for accounts that several recipients report, so send documents only to people who expect them ([anti-spam policy](https://md2sign.com/anti-spam-policy)).
 
-Every plan includes versioned templates with `{{ variables }}` and webhooks that post signed contracts to your CRM or automations. Team (US$19/month for 100 envelopes) and Business+ (US$39/month for 500) add team members with no seat fees, your logo on emails and PDFs, input fields, signing in order and signer email verification (each signer confirms a code emailed to them before their signature counts). Yearly billing is 12 months for the price of 10.
+Every plan includes versioned templates with `{{ variables }}` and webhooks that post signed contracts to your CRM or automations. Tag each document with your own details (customer, job or quote numbers) as `metadata`: they come back in every webhook and you can search documents by them. Team (US$19/month for 100 envelopes) and Business+ (US$39/month for 500) add team members with no seat fees, your logo on emails and PDFs, input fields, signing in order and signer email verification (each signer confirms a code emailed to them before their signature counts). Yearly billing is 12 months for the price of 10.
 
 ## Links
 

@@ -92,6 +92,17 @@ Send only when they clearly say to send.
 5. **Draft and test.** `create_draft` saves it (edit later with `update_draft`; `delete_document` permanently removes a draft the user no longer wants). Offer `test_send_document`: a free, watermarked copy emailed only to the account owner.
 6. **Send** with `send_document` only after the user confirms. It emails every signer. Then use `get_document` or `list_documents` to report who has signed, `remind_recipients` to nudge, `void_document` to cancel, `get_audit_trail` for the evidence, and `get_document_pdf` for the PDF. It returns a `download_url` that needs no API key and expires after 30 minutes, so give it to the user or download it straight away; `signed_and_sealed` says whether everyone has signed.
 
+## Your own references
+
+When the user (or their system) has its own IDs for a document, such as a customer, job or quote number, attach them so the signed document can be matched up later:
+
+- `metadata` on `create_draft`, `update_draft` or `create_document_from_template`: a flat object of up to 20 keys, e.g. `{"customer_number": "C-1001", "job_number": "J-77", "quote_number": "Q-310"}`. Keys start with a letter or `_`, then use letters, numbers, `_` and `-` (up to 40 characters); values are text or numbers up to 500 characters, stored as trimmed text (`77` comes back as `"77"`). No nested objects, lists or true/false. On `update_draft` it replaces the whole object; `null` clears it. It can't change once the document is sent.
+- `external_reference`: a single ID string, if one is all they need.
+- Both come back on every document and in every webhook (`document.metadata`, `document.external_reference`), so their CRM or automation can file the signed PDF against the right record.
+- To find documents later, `list_documents` takes `metadata` (every given key must match exactly, case-sensitive) and `external_reference`, e.g. `metadata: {"customer_number": "C-1001"}`. Over REST: `GET /api/v1/documents?metadata[customer_number]=C-1001`.
+
+Only add these when the user gives you their own IDs or asks for them; don't invent them.
+
 ## Plan features
 
 Every plan includes templates and webhooks. Input fields, signing in order, signer email verification, teammates and the company logo need the Team or Business+ plan.
