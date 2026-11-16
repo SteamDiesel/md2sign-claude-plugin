@@ -96,7 +96,7 @@ Send only when they clearly say to send.
 
 When the user (or their system) has its own IDs for a document, such as a customer, job or quote number, attach them so the signed document can be matched up later:
 
-- `metadata` on `create_draft`, `update_draft` or `create_document_from_template`: a flat object of up to 20 keys, e.g. `{"customer_number": "C-1001", "job_number": "J-77", "quote_number": "Q-310"}`. Keys use letters, numbers, `_` and `-` (up to 40 characters); values are text or numbers up to 500 characters, stored as text (`77` comes back as `"77"`). No nested objects, lists or true/false. On `update_draft` it replaces the whole object; `null` clears it. It can't change once the document is sent.
+- `metadata` on `create_draft`, `update_draft` or `create_document_from_template`: a flat object of up to 20 keys, e.g. `{"customer_number": "C-1001", "job_number": "J-77", "quote_number": "Q-310"}`. Keys start with a letter or `_`, then use letters, numbers, `_` and `-` (up to 40 characters); values are text or numbers up to 500 characters, stored as trimmed text (`77` comes back as `"77"`). No nested objects, lists or true/false. On `update_draft` it replaces the whole object; `null` clears it. It can't change once the document is sent.
 - `external_reference`: a single ID string, if one is all they need.
 - Both come back on every document and in every webhook (`document.metadata`, `document.external_reference`), so their CRM or automation can file the signed PDF against the right record.
 - To find documents later, `list_documents` takes `metadata` (every given key must match exactly, case-sensitive) and `external_reference`, e.g. `metadata: {"customer_number": "C-1001"}`. Over REST: `GET /api/v1/documents?metadata[customer_number]=C-1001`.
