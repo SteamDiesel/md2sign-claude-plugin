@@ -136,6 +136,7 @@ Every plan includes templates and webhooks. Input fields, signing in order, sign
 | `sending_suspended` | Recipients reported this account's emails as unwanted, so md2sign has paused sending, reminders and test copies while it reviews the account. Don't retry or try another way to send. Tell the user plainly, and that they can still see their documents and appeal at the `appeal_email` in the error |
 | `recipient_opted_out` | The listed `emails` reported this account's emails or bounced, so md2sign won't email them for this account. Remove them from the document and suggest the user contacts them another way first |
 | `signup_blocked` | This email address (or its domain) can't be used for a new md2sign account. Give the user the `message`; don't try other addresses |
+| `disposable_email` | The address is at a disposable (throwaway) email provider, which can't hold an md2sign account. Ask the user for an address they'll keep, such as their work email; don't make one up |
 
 **Spam protection.** Every email md2sign sends to a recipient has a "Didn't expect this email? Report it" link. A recipient who reports (or marks it as spam) is never emailed by that account again and their unsigned document is declined, and repeated reports suspend the account's sending. So only help send documents to people who expect them: never to bought or scraped lists, as cold outreach or marketing, or to people the user doesn't know. See https://md2sign.com/anti-spam-policy.
 
