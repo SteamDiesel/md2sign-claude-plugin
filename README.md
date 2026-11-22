@@ -56,7 +56,7 @@ You write (or Claude writes) normal markdown with one line for each person who n
 [[signature: Sam Lee <sam@acme.com> | role: Contractor]]
 ```
 
-Before anything is sent, Claude shows you a preview link where you can compare the Classic, Modern and Formal styles, walks you through the wording, and offers a free test copy to your own inbox. md2sign emails each signer a link to a clean signing page. Every signature is SHA-256 hash-chained and Ed25519 sealed, and everyone gets the signed PDF with an audit certificate. Anyone can check a document's seal at its public verification page.
+Before anything is sent, Claude shows you a preview link where you can compare the Classic, Modern and Formal styles, walks you through the wording, and offers a free test copy to your own inbox. md2sign emails each signer a link to a clean signing page. Every signature is SHA-256 hash-chained and Ed25519 sealed, and everyone gets the signed PDF with an audit certificate. Anyone can check a document's seal at its public verification page. md2sign deletes a document's contents 90 days after it's finished (or 7, 14, 30 or 60 days if you choose), keeping only what proves who signed and when, so keep the signed PDF.
 
 Every email to a signer also has a "Didn't expect this email? Report it" link. md2sign stops emailing anyone who reports an account, and pauses sending for accounts that several recipients report, so send documents only to people who expect them ([anti-spam policy](https://md2sign.com/anti-spam-policy)).
 
