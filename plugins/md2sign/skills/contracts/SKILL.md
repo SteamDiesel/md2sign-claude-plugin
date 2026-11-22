@@ -130,7 +130,7 @@ Every plan includes templates and webhooks. Input fields, signing in order, sign
 | `trial_limit` | The free trial allows 3 envelopes with up to 5 signers each. Remove signers, or wait for the trial to end (`trial_ends_at`); the admin can also end the trial early from Billing to start the full plan now |
 | `not_a_draft` | Sent documents can't be edited or deleted; void and create a new one |
 | `not_sent` | Drafts have no PDF yet; use `render_preview` or `test_send_document` |
-| `content_deleted` | The document's contents were deleted under the account's retention setting, so there's no PDF or markdown any more. Tell the user to use the signed PDF emailed to every party on completion; the `verify_url` in the error still confirms the signatures |
+| `content_deleted` | The document's contents were deleted under the account's retention setting, so there's no PDF or markdown any more. For a completed document, tell the user to use the signed PDF emailed to every party on completion. A declined, voided or expired document never had a signed PDF, so say its contents are gone. Either way, the `verify_url` in the error still shows who signed and when |
 | `admin_required` | Only the company admin (or, for a template, its creator) can do this, including changing the company name, logo or how long contents are kept; ask them |
 | `not_found` | Wrong ID, or the document belongs to someone else in the company; check `list_documents` |
 | `team_plan_required` | Input fields, signing in order, signer email verification, the company logo and adding teammates need the Team or Business+ plan; suggest upgrading, or remove the fields, the order directive or `verify=email` (`verify_signers: false`) |
